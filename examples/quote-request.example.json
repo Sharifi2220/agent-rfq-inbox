@@ -1,0 +1,38 @@
+{
+  "openquote": "0.1",
+  "idempotency_key": "6f1c9e2a-4b7d-4e0a-9c3e-2f8d1a5b7c90",
+  "service": {
+    "service_id": "heating.repair",
+    "summary": "Gastherme zeigt seit heute Früh Störung F28",
+    "details": "Kein Warmwasser, Heizung aus. Neustart hat nicht geholfen.",
+    "urgency": "as_soon_as_possible",
+    "object": {
+      "kind": "gas_boiler",
+      "manufacturer": "Beispielwerk",
+      "model": "BW 24",
+      "year_installed": 2015
+    },
+    "requirements": ["Termin bitte vormittags"]
+  },
+  "location": {
+    "country": "AT",
+    "postal_code": "1100",
+    "locality": "Wien"
+  },
+  "wanted": ["quote", "site_visit"],
+  "requester": {
+    "name": "Erika Beispiel",
+    "email": "erika@example.org",
+    "preferred_contact": "email",
+    "language": "de",
+    "is_business": false
+  },
+  "submitted_via": {
+    "channel": "agent",
+    "agent_name": "example-agent"
+  },
+  "authorization": {
+    "requested_by_person": true,
+    "contact_allowed": true
+  }
+}

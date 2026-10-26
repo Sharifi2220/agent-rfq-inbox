@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "openquote-beispiel-haustechnik": {
+      "command": "openquote-lite",
+      "args": ["--config", "/ABSOLUTE/PATH/TO/openquote.toml", "mcp", "--transport", "stdio"]
+    }
+  }
+}

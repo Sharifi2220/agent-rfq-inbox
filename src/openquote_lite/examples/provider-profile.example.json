@@ -1,0 +1,41 @@
+{
+  "openquote": "0.1",
+  "provider": {
+    "id": "beispiel-haustechnik",
+    "name": "Beispiel Haustechnik",
+    "legal_name": "Beispiel Haustechnik GmbH (fiktiver Beispielbetrieb)",
+    "description": "Fiktiver Installationsbetrieb für Heizung und Sanitär in Wien. Nur für Tests und Vorführungen.",
+    "website": "https://haustechnik.example",
+    "privacy_notice_url": "https://haustechnik.example/datenschutz",
+    "imprint_url": "https://haustechnik.example/impressum",
+    "languages": ["de", "en"],
+    "emergency_note": "Bei Gasgeruch: Gebäude verlassen, keine Schalter betätigen und den Gas-Notruf wählen (Österreich: 128)."
+  },
+  "services": [
+    {
+      "id": "heating.repair",
+      "name": "Heizungsreparatur",
+      "description": "Störungsbehebung an Gasthermen, Wärmepumpen und Heizkreisen.",
+      "price_hint": {"currency": "EUR", "min": 75, "max": 110, "unit": "per_hour", "note": "Unverbindlicher Richtwert zzgl. Anfahrt."}
+    },
+    {
+      "id": "heating.maintenance",
+      "name": "Thermenwartung",
+      "description": "Jährliche Wartung von Gasthermen inklusive Abgasmessung.",
+      "price_hint": {"currency": "EUR", "min": 140, "max": 220, "unit": "per_job", "note": "Unverbindlicher Richtwert."}
+    },
+    {
+      "id": "plumbing.repair",
+      "name": "Sanitärreparatur",
+      "description": "Reparaturen an Armaturen, Abflüssen und Leitungen."
+    }
+  ],
+  "service_area": {
+    "country": "AT",
+    "postal_codes": ["1100", "1110", "1120"]
+  },
+  "request_policy": {
+    "accepts": ["quote", "site_visit", "callback", "availability"],
+    "response_time_hint": "P2D"
+  }
+}

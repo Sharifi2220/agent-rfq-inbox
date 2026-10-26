@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openquote-lite"
+version = "0.1.1a1"
+description = "Self-hosted endpoint for bounded, human-reviewed quote requests from AI agents (HTTP + MCP)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+keywords = ["ai-agents", "mcp", "quote-request", "rfq", "schema.org", "local-first"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+]
+dependencies = []
+
+[project.urls]
+Source = "https://github.com/Sharifi2220/agent-rfq-inbox"
+Issues = "https://github.com/Sharifi2220/agent-rfq-inbox/issues"
+Changelog = "https://github.com/Sharifi2220/agent-rfq-inbox/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+mcp = ["mcp>=2.0,<3"]
+test = ["pytest>=8", "jsonschema>=4.21"]
+
+[project.scripts]
+openquote-lite = "openquote_lite.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+openquote_lite = ["schemas/*.json", "examples/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

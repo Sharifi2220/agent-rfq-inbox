@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openquote-lite:schema:0.1:provider-profile",
+  "title": "OpenQuote Lite provider profile 0.1",
+  "description": "Self-declared description of a provider: who it is, which services it offers, where, and which kinds of requests it accepts. The profile is the single source of truth for the endpoint, the JSON-LD snippet and the API catalog. All statements are self-declared and are published with verification status 'self_declared'.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["openquote", "provider", "services", "service_area", "request_policy"],
+  "properties": {
+    "openquote": {"const": "0.1"},
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "privacy_notice_url"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 64},
+        "name": {"type": "string", "minLength": 2, "maxLength": 120},
+        "legal_name": {"type": "string", "minLength": 2, "maxLength": 200},
+        "description": {"type": "string", "maxLength": 500},
+        "website": {"type": "string", "maxLength": 300, "pattern": "^https://[^\\s]+$"},
+        "privacy_notice_url": {"type": "string", "maxLength": 300, "pattern": "^https://[^\\s]+$"},
+        "imprint_url": {"type": "string", "maxLength": 300, "pattern": "^https://[^\\s]+$"},
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$"}
+        },
+        "emergency_note": {
+          "description": "Short note for humans, e.g. which emergency number to call. Shown in receipts.",
+          "type": "string",
+          "maxLength": 300
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name"],
+        "properties": {
+          "id": {"type": "string", "maxLength": 64, "pattern": "^[a-z0-9]+([._-][a-z0-9]+)*$"},
+          "name": {"type": "string", "minLength": 2, "maxLength": 120},
+          "description": {"type": "string", "maxLength": 500},
+          "price_hint": {
+            "description": "Indicative, non-binding price range. Never a quote.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["currency", "unit"],
+            "properties": {
+              "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+              "min": {"type": "number", "minimum": 0},
+              "max": {"type": "number", "minimum": 0},
+              "unit": {"enum": ["per_hour", "per_job", "per_visit"]},
+              "note": {"type": "string", "maxLength": 200}
+            }
+          }
+        }
+      }
+    },
+    "service_area": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country"],
+      "properties": {
+        "country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+        "postal_codes": {
+          "type": "array",
+          "maxItems": 2000,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9 -]{1,9}$"}
+        },
+        "postal_code_prefixes": {
+          "type": "array",
+          "maxItems": 200,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9]{1,6}$"}
+        }
+      }
+    },
+    "request_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accepts"],
+      "properties": {
+        "accepts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {"enum": ["quote", "site_visit", "callback", "availability", "documents"]}
+        },
+        "response_time_hint": {
+          "description": "Non-binding ISO 8601 duration, e.g. P2D.",
+          "type": "string",
+          "pattern": "^P(?:[0-9]+D|[0-9]+W|T[0-9]+H)$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openquote-lite:schema:0.1:quote-request",
+  "title": "OpenQuote Lite quote request 0.1",
+  "description": "A bounded, machine-readable request for a quote, site visit, callback, availability answer or documents. A request can never accept a price, confirm an order, book an appointment or carry payment data. A person at the provider reviews every request.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "openquote",
+    "idempotency_key",
+    "service",
+    "location",
+    "wanted",
+    "requester",
+    "submitted_via",
+    "authorization"
+  ],
+  "properties": {
+    "openquote": {
+      "description": "Protocol version of this request.",
+      "const": "0.1"
+    },
+    "idempotency_key": {
+      "description": "Generated once by the sender for this request and reused unchanged on every retry. A UUID is a good choice.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{16,128}$"
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["service_id", "summary", "urgency"],
+      "properties": {
+        "service_id": {
+          "description": "One of the service ids published in the provider profile.",
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-z0-9]+([._-][a-z0-9]+)*$"
+        },
+        "summary": {
+          "description": "One line describing the need, in the requester's words.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "details": {
+          "description": "Free text with further details. Treated as untrusted content by the provider.",
+          "type": "string",
+          "maxLength": 4000
+        },
+        "urgency": {
+          "description": "OpenQuote is not an emergency channel; there is deliberately no 'emergency' value.",
+          "enum": ["as_soon_as_possible", "within_2_weeks", "flexible"]
+        },
+        "object": {
+          "description": "Optional description of the equipment or object concerned, e.g. from a building or equipment record.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {"type": "string", "minLength": 1, "maxLength": 80},
+            "manufacturer": {"type": "string", "minLength": 1, "maxLength": 80},
+            "model": {"type": "string", "minLength": 1, "maxLength": 80},
+            "year_installed": {"type": "integer", "minimum": 1900, "maximum": 2100},
+            "notes": {"type": "string", "maxLength": 500}
+          }
+        },
+        "requirements": {
+          "description": "Requirements kept exactly as written by the requester.",
+          "type": "array",
+          "maxItems": 10,
+          "items": {"type": "string", "minLength": 1, "maxLength": 300}
+        }
+      }
+    },
+    "location": {
+      "description": "Enough to route the request. The street address is exchanged later between people.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country", "postal_code"],
+      "properties": {
+        "country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+        "postal_code": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9 -]{1,9}$"},
+        "locality": {"type": "string", "minLength": 1, "maxLength": 80}
+      }
+    },
+    "timing": {
+      "description": "Preferred time window. A wish, never a booked date.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "earliest_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "latest_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "notes": {"type": "string", "maxLength": 300}
+      }
+    },
+    "wanted": {
+      "description": "What the requester wants back.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"enum": ["quote", "site_visit", "callback", "availability", "documents"]}
+    },
+    "requester": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "preferred_contact"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 120},
+        "email": {"type": "string", "maxLength": 254, "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"},
+        "phone": {"type": "string", "pattern": "^\\+?[0-9][0-9 ()/-]{4,29}$"},
+        "preferred_contact": {"enum": ["email", "phone"]},
+        "language": {"type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$"},
+        "is_business": {"type": "boolean"}
+      }
+    },
+    "submitted_via": {
+      "description": "Who transmitted the request. The agent name is recorded but never trusted as identity.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel"],
+      "properties": {
+        "channel": {"enum": ["agent", "human"]},
+        "agent_name": {"type": "string", "minLength": 1, "maxLength": 120},
+        "agent_operator": {"type": "string", "minLength": 1, "maxLength": 120}
+      }
+    },
+    "authorization": {
+      "description": "Both confirmations are mandatory: a real person asked for this request and agreed to be contacted about it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested_by_person", "contact_allowed"],
+      "properties": {
+        "requested_by_person": {"const": true},
+        "contact_allowed": {"const": true}
+      }
+    }
+  }
+}

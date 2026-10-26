@@ -1,0 +1,9 @@
+OpenQuote Lite (working title)
+
+The project owner authorized release of this source under the Apache License,
+Version 2.0 (see LICENSE). This notice does not assert an individual copyright
+holder. The initial implementation was prepared with AI assistance for the
+project owner and was independently reviewed before this alpha release.
+
+No third-party source code is knowingly vendored. Optional Python packages,
+including the MCP SDK, are installed separately under their own licenses.
